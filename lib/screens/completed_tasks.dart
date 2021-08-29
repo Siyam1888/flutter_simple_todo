@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:simple_todo/task_widget.dart';
+import 'package:simple_todo/models/task.dart';
+import 'package:simple_todo/utils/todo_preferences.dart';
+import 'package:simple_todo/widgets/task_widget.dart';
 
 class CompletedTasks extends StatefulWidget {
   // Data from the home page
-  List completedTodos;
-  List incompleteTodos;
+  List<Task> todos;
+  List<Task> completedTodos;
+  List<Task> incompleteTodos;
+
   final GlobalKey<AnimatedListState> mainPageKey;
   final Tween<Offset> offset;
   CompletedTasks({
+    required this.todos,
     required this.completedTodos,
     required this.incompleteTodos,
     required this.offset,
@@ -23,9 +28,14 @@ class _CompletedTasksState extends State<CompletedTasks> {
 
   void _removeTask(index) {
     setState(() {
-      Map currentTask = widget.completedTodos[index];
-      // Remove from the actual list
+      Task currentTask = widget.completedTodos[index];
+      // Remove from the temporary list
       widget.completedTodos.removeAt(index);
+
+      // remove from the local storage
+      widget.todos.remove(currentTask);
+      TodoPreferences.setTodos(widget.todos);
+
       // Remove from the UI
       animatedListKey.currentState!.removeItem(
           index,
@@ -35,16 +45,20 @@ class _CompletedTasksState extends State<CompletedTasks> {
               offset: widget.offset,
               icon: Icon(Icons.delete)));
     });
-    print(widget.completedTodos);
   }
 
   _markAsIncomplete(index) {
     setState(() {
-      Map currentTask = widget.completedTodos[index];
+      Task currentTask = widget.completedTodos[index];
 
       // Add the task to incompleteTodos
-      currentTask['completed'] = false;
+      currentTask.completed = false;
+      // save the change on the local storage
+      TodoPreferences.setTodos(widget.todos);
+
+      // add to the incomplete todos list
       widget.incompleteTodos.add(currentTask);
+
       // add it to the UI on function `_goToCompletedTasks` at the main.dart file
 
       // Remove from the actual list

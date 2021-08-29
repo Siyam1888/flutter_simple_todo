@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:simple_todo/models/task.dart';
 
 // Widget defining the todo form screen
 class TodoForm extends StatefulWidget {
+  Task? initialTask = Task(task: '', date: '', completed: false);
+
+  TodoForm({this.initialTask});
+
   @override
   _TodoFormState createState() => _TodoFormState();
 }
@@ -29,6 +34,7 @@ class _TodoFormState extends State<TodoForm> {
                 SizedBox(height: 80),
                 // Task name
                 TextFormField(
+                  // initialValue: widget.initialTask!.task,
                   decoration: InputDecoration(
                     icon: Icon(Icons.done_outline),
                     labelText: 'Task',
@@ -45,6 +51,7 @@ class _TodoFormState extends State<TodoForm> {
                 SizedBox(height: 40),
                 // Date
                 TextFormField(
+                  // initialValue: widget.initialTask!.date,
                   decoration: InputDecoration(
                     icon: Icon(Icons.date_range),
                     labelText: 'Date',
@@ -68,8 +75,8 @@ class _TodoFormState extends State<TodoForm> {
                   .showSnackBar(SnackBar(content: Text('$taskName $date')));
 
               // Pop the screen and send the taskname and date back to the main screen
-              Navigator.pop(context,
-                  {'task': taskName, 'date': date, 'completed': false});
+              Navigator.pop(
+                  context, Task(task: taskName, date: date, completed: false));
             }
           },
           child: Icon(Icons.done),
