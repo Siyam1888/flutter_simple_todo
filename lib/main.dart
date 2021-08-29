@@ -89,12 +89,14 @@ class _TodoListState extends State<TodoList> {
                   initialTask: currentTask,
                 )));
 
-    // update the temporary storage
-    incompleteTodos[incompleteTodos.indexOf(currentTask)] = updatedTask;
+    if (updatedTask != null) {
+      // update the temporary storage
+      incompleteTodos[incompleteTodos.indexOf(currentTask)] = updatedTask;
 
-    // update the local storage
-    todos[todos.indexOf(currentTask)] = updatedTask;
-    await TodoPreferences.setTodos(todos);
+      // update the local storage
+      todos[todos.indexOf(currentTask)] = updatedTask;
+      await TodoPreferences.setTodos(todos);
+    }
   }
 
   // Mark a task as completed
@@ -141,7 +143,9 @@ class _TodoListState extends State<TodoList> {
     for (int i = 1; i <= changedTodosNum; i++) {
       // the index `incompleteTodos.length - 1` was causing index errors
       // insert to the UI
-      _animatedListKey.currentState!.insertItem(0);
+      print(incompleteTodos.length - changedTodosNum + i - 1);
+      _animatedListKey.currentState!
+          .insertItem(incompleteTodos.length - changedTodosNum + i - 1);
     }
   }
 

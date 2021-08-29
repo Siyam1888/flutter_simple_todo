@@ -3,8 +3,7 @@ import 'package:simple_todo/models/task.dart';
 
 // Widget defining the todo form screen
 class TodoForm extends StatefulWidget {
-  Task? initialTask = Task(task: '', date: '', completed: false);
-
+  Task? initialTask;
   TodoForm({this.initialTask});
 
   @override
@@ -34,7 +33,9 @@ class _TodoFormState extends State<TodoForm> {
                 SizedBox(height: 80),
                 // Task name
                 TextFormField(
-                  // initialValue: widget.initialTask!.task,
+                  initialValue: widget.initialTask != null
+                      ? widget.initialTask!.task
+                      : '',
                   decoration: InputDecoration(
                     icon: Icon(Icons.done_outline),
                     labelText: 'Task',
@@ -51,7 +52,9 @@ class _TodoFormState extends State<TodoForm> {
                 SizedBox(height: 40),
                 // Date
                 TextFormField(
-                  // initialValue: widget.initialTask!.date,
+                  initialValue: widget.initialTask != null
+                      ? widget.initialTask!.date
+                      : '',
                   decoration: InputDecoration(
                     icon: Icon(Icons.date_range),
                     labelText: 'Date',
